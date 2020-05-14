@@ -83,7 +83,6 @@ snippets:
         <entry name="{{ TAG_NAME }}">
                       <color>color20</color>
                     </entry>
-
   - name: entry-260562
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/address-group
     element: |-
@@ -145,7 +144,7 @@ snippets:
                           <hip-profiles>
                             <member>any</member>
                           </hip-profiles>
-                          <action>allow</action>
+                          <action>deny</action>
                           <description>{{ description_in }}</description>
                         </entry>
 
@@ -185,7 +184,7 @@ snippets:
                           <hip-profiles>
                             <member>any</member>
                           </hip-profiles>
-                          <action>allow</action>
+                          <action>deny</action>
                           <description>{{ descr_out }}</description>
                         </entry>
 
