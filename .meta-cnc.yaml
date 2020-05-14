@@ -29,35 +29,39 @@ labels:
 variables:
   - name: AG_NAME
     description: Adress Group Name
-    default: myFirewall
+    default: ag-skillet
+    type_hint: text
+  - name: EDL_NAME
+    description: EDL Name
+    default: EDL_skillet
     type_hint: text
   - name: EDL_URL
     description: EDL Name
-    default: URL
+    default: https://loop.paloaltonetworks.com/docs/DOC-42850
     type_hint: text
   - name: EDL_time
     description: Adress Group Name
-    default: myFirewall
+    default: five-minute
     type_hint: text
   - name: OUT_RULE_NAME
     description: OUT rule Name
-    default: myFirewall
+    default: skilletOUT
     type_hint: text
   - name: IN_RULE_NAME
     description: IN rule Name
-    default: myFirewall
+    default: skilletIN
     type_hint: text
   - name: TAG_NAME
     description: tag rule Name
-    default: myFirewall
+    default: skilletTAG
     type_hint: text
   - name: descr_out
     description: descr out
-    default: myFirewall
+    default: skillet descr
     type_hint: text
   - name: description_in
     description: descr in
-    default: myFirewall
+    default: skillet descr
     type_hint: text
 
 # ---------------------------------------------------------------------
@@ -76,8 +80,8 @@ snippets:
   - name: entry-251138
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/tag
     element: |-
-        <entry name="{{ TAG_NAME }} ">
-                      <color>{{ tag_color }}</color>
+        <entry name="{{ TAG_NAME }}">
+                      <color>color3</color>
                     </entry>
 
   - name: entry-260562
@@ -85,7 +89,7 @@ snippets:
     element: |-
         <entry name="{{ AG_NAME }}">
                       <dynamic>
-                        <filter>'{{ TAG_NAME }}' </filter>
+                        <filter>'{{ TAG_NAME }}'</filter>
                       </dynamic>
                     </entry>
 
