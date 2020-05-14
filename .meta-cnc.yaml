@@ -27,42 +27,37 @@ labels:
 # type_hint defines the form field used by panhandler
 # type_hints can be text, ip_address, or dropdown
 variables:
-  - name: AG_NAME
-    description: Adress Group Name
-    default: ag-skillet
+  - name: edl_name
+    description: External-list name
+    default: my_edl
     type_hint: text
-  - name: EDL_NAME
-    description: EDL Name
-    default: EDL_skillet
+  - name: edl_description
+    description: External-list description
+    default: my_edl description
     type_hint: text
-  - name: EDL_URL
-    description: EDL URL
-    default: https://loop.paloaltonetworks.com/docs/DOC-42850
+  - name: edl_url
+    description: External-list URL
+    default: my_edl
+    type_hint: url
+  - name: tag_name
+    description: tag name
+    default: my_tag
     type_hint: text
-  - name: EDL_time
-    description: Adress Group Name
-    default: five-minute
+  - name: tag_description
+    description: tag description
+    default: tag description
     type_hint: text
-  - name: OUT_RULE_NAME
-    description: OUT rule Name
-    default: skilletOUT
-    type_hint: text
-  - name: IN_RULE_NAME
-    description: IN rule Name
-    default: skilletIN
-    type_hint: text
-  - name: TAG_NAME
-    description: tag rule Name
-    default: skilletTAG
-    type_hint: text
-  - name: descr_out
-    description: descr out
-    default: skillet descr
-    type_hint: text
-  - name: description_in
-    description: descr in
-    default: skillet descr
-    type_hint: text
+  - name: tag_color
+    description: tag color
+    default: red
+    type_hint: dropdown
+    dd_list:
+      - key: green
+        value: color2
+      - key: orange
+        value: color6
+      - key: red
+        value: color1
 
 # ---------------------------------------------------------------------
 # end of variables section
@@ -77,117 +72,104 @@ variables:
 # There is a variable called snippets that we can use to auto-generate this section for us
 snippets:
 
-  - name: entry-251138
+  - name: object_tag
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/tag
     element: |-
-        <entry name="{{ TAG_NAME }}">
-                      <color>color20</color>
-                    </entry>
-  - name: entry-260562
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/address-group
-    element: |-
-        <entry name="{{ AG_NAME }}">
-                      <dynamic>
-                        <filter>'{{ TAG_NAME }}'</filter>
-                      </dynamic>
-                    </entry>
-
-  - name: external-list-337939
+      <entry name="{{ tag_name }}">
+        <color>{{ tag_color }}</color>
+        <comments>{{ tag_description }}</comments>
+      </entry>
+  - name: object_external_list
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]
     element: |-
-        <external-list>
-                    <entry name="{{ EDL_NAME }}">
-                      <type>
-                        <ip>
-                          <recurring>
-                            <{{ EDL_time }}/>
-                          </recurring>
-                          <url>{{ EDL_URL }}</url>
-                        </ip>
-                      </type>
-                    </entry>
-                  </external-list>
+      <external-list>
+          <entry name="{{ edl_name }}">
+            <type>
+              <ip>
+                <recurring>
+                  <five-minute/>
+                </recurring>
+                <description>{{ edl_description }}</description>
+                <url>{{ edl_url }}</url>
+              </ip>
+            </type>
+          </entry>
+        </external-list>
+- name: security_rule_outbound
+  xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
+  element: |-
+      <entry name="{{ edl_name }}-out">
+        <to>
+          <member>any</member>
+        </to>
+        <from>
+          <member>any</member>
+        </from>
+        <source>
+          <member>any</member>
+        </source>
+        <destination>
+          <member>{{ edl_name }}</member>
+        </destination>
+        <source-user>
+          <member>any</member>
+        </source-user>
+        <category>
+          <member>any</member>
+        </category>
+        <application>
+          <member>any</member>
+        </application>
+        <service>
+          <member>application-default</member>
+        </service>
+        <hip-profiles>
+          <member>any</member>
+        </hip-profiles>
+        <tag>
+          <member>{{ tag_name }}</member>
+        </tag>
+        <action>deny</action>
+        <description>outbound EDL IP block rule. EDL info: {{ edl_description }} </description>
+      </entry>
 
-  - name: entry-62704
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
-    element: |-
-        <entry name="{{ IN_RULE_NAME }}" uuid="533e1a77-32ee-4429-b6ca-ed876a02289f">
-                          <profile-setting>
-                            <group>
-                              <member>default</member>
-                            </group>
-                          </profile-setting>
-                          <to>
-                            <member>trust</member>
-                          </to>
-                          <from>
-                            <member>any</member>
-                          </from>
-                          <source>
-                            <member>{{ AG_NAME }}</member>
-                          </source>
-                          <destination>
-                            <member>any</member>
-                          </destination>
-                          <source-user>
-                            <member>any</member>
-                          </source-user>
-                          <category>
-                            <member>any</member>
-                          </category>
-                          <application>
-                            <member>any</member>
-                          </application>
-                          <service>
-                            <member>application-default</member>
-                          </service>
-                          <hip-profiles>
-                            <member>any</member>
-                          </hip-profiles>
-                          <action>deny</action>
-                          <description>{{ description_in }}</description>
-                        </entry>
-
-  - name: entry-237321
-    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
-    element: |-
-        <entry name="{{ OUT_RULE_NAME }}" uuid="bf2e60a3-189b-46df-a1bf-7fa55013d940">
-                          <profile-setting>
-                            <group>
-                              <member>default</member>
-                            </group>
-                          </profile-setting>
-                          <to>
-                            <member>trust</member>
-                          </to>
-                          <from>
-                            <member>any</member>
-                          </from>
-                          <source>
-                            <member>any</member>
-                          </source>
-                          <destination>
-                            <member>{{ AG_NAME }}</member>
-                          </destination>
-                          <source-user>
-                            <member>any</member>
-                          </source-user>
-                          <category>
-                            <member>any</member>
-                          </category>
-                          <application>
-                            <member>any</member>
-                          </application>
-                          <service>
-                            <member>application-default</member>
-                          </service>
-                          <hip-profiles>
-                            <member>any</member>
-                          </hip-profiles>
-                          <action>deny</action>
-                          <description>{{ descr_out }}</description>
-                        </entry>
-
+- name: security_rule_inbound
+  xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
+  element: |-
+      <entry name="{{ edl_name }}-in">
+        <to>
+          <member>any</member>
+        </to>
+        <from>
+          <member>any</member>
+        </from>
+        <source>
+          <member>{{ edl_name }}</member>
+        </source>
+        <destination>
+          <member>any</member>
+        </destination>
+        <source-user>
+          <member>any</member>
+        </source-user>
+        <category>
+          <member>any</member>
+        </category>
+        <application>
+          <member>any</member>
+        </application>
+        <service>
+          <member>application-default</member>
+        </service>
+        <hip-profiles>
+          <member>any</member>
+        </hip-profiles>
+        <tag>
+          <member>{{ tag_name }}</member>
+        </tag>
+        <action>deny</action>
+        <description>inbound EDL IP block rule. EDL info: {{ edl_description }}</description>
+      </entry>
 
 # ---------------------------------------------------------------------
 # end of snippets section
