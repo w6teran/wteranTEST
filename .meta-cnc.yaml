@@ -167,7 +167,7 @@ snippets:
           </tag>
           <action>deny</action>
           <description>inbound EDL IP block rule. EDL info: {{ edl_description }}</description>
-      </entry>
+        </entry>
 
 # ---------------------------------------------------------------------
 # end of snippets section
