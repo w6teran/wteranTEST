@@ -36,7 +36,7 @@ variables:
     default: EDL_skillet
     type_hint: text
   - name: EDL_URL
-    description: EDL Name
+    description: EDL URL
     default: https://loop.paloaltonetworks.com/docs/DOC-42850
     type_hint: text
   - name: EDL_time
@@ -81,7 +81,7 @@ snippets:
     xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/tag
     element: |-
         <entry name="{{ TAG_NAME }}">
-                      <color>color3</color>
+                      <color>color20</color>
                     </entry>
 
   - name: entry-260562
