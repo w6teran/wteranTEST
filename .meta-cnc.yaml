@@ -1,0 +1,190 @@
+# skillet preamble information used by panhandler
+# ---------------------------------------------------------------------
+# unique snippet name
+name: mySkilletWT2
+# label used for menu selection
+label: my_skillet_label
+description: INTERACT with a EDL and block
+
+# type of device configuration
+# common types are panorama, panos, and template
+# https://github.com/PaloAltoNetworks/panhandler/blob/develop/docs/metadata_configuration.rst
+type: panos
+# preload static or default-based templates
+extends:
+
+# grouping of like snippets for dynamic menu creation in panhandler
+labels:
+  collection:
+    - myCollection
+
+# ---------------------------------------------------------------------
+# end of preamble section
+
+# variables section
+# ---------------------------------------------------------------------
+# variables used in the configuration templates
+# type_hint defines the form field used by panhandler
+# type_hints can be text, ip_address, or dropdown
+variables:
+  - name: AG_NAME
+    description: Adress Group Name
+    default: myFirewall
+    type_hint: text
+- name: EDL_URL
+    description: EDL Name
+    default: URL
+    type_hint: text
+- name: EDL_time
+    description: Adress Group Name
+    default: myFirewall
+    type_hint: text
+  - name: OUT_RULE_NAME
+    description: OUT rule Name
+    default: myFirewall
+   type_hint: text
+- name: IN_RULE_NAME
+    description: IN rule Name
+    default: myFirewall
+    type_hint: text
+ - name: TAG_NAME
+  description: tag rule Name
+                 default: myFirewall
+                 type_hint: text
+                 - name: descr_out
+                     description: descr out
+                     default: myFirewall
+                     type_hint: text
+- name: description_in
+    description: descr in
+    default: myFirewall
+    type_hint: text
+
+# ---------------------------------------------------------------------
+# end of variables section
+
+# snippets section
+# ---------------------------------------------------------------------
+# snippets used for api configuration including xpath and element as file name
+# files will load in the order listed
+# NOTE: The following snippets are auto-generated and ordered automatically.
+# Changing the content of the snippet may be necessary, but do NOT change the order
+
+# There is a variable called snippets that we can use to auto-generate this section for us
+snippets:
+
+  - name: entry-251138
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/tag
+    element: |-
+        <entry name="{{ TAG_NAME }} ">
+                      <color>{{ tag_color }}</color>
+                    </entry>
+
+  - name: entry-260562
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/address-group
+    element: |-
+        <entry name="{{ AG_NAME }}">
+                      <dynamic>
+                        <filter>'{{ TAG_NAME }}' </filter>
+                      </dynamic>
+                    </entry>
+
+  - name: external-list-337939
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]
+    element: |-
+        <external-list>
+                    <entry name="{{ EDL_NAME }}">
+                      <type>
+                        <ip>
+                          <recurring>
+                            <{{ EDL_time }}/>
+                          </recurring>
+                          <url>{{ EDL_URL }}</url>
+                        </ip>
+                      </type>
+                    </entry>
+                  </external-list>
+
+  - name: entry-62704
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
+    element: |-
+        <entry name="{{ IN_RULE_NAME }}" uuid="533e1a77-32ee-4429-b6ca-ed876a02289f">
+                          <profile-setting>
+                            <group>
+                              <member>default</member>
+                            </group>
+                          </profile-setting>
+                          <to>
+                            <member>trust</member>
+                          </to>
+                          <from>
+                            <member>any</member>
+                          </from>
+                          <source>
+                            <member>{{ AG_NAME }}</member>
+                          </source>
+                          <destination>
+                            <member>any</member>
+                          </destination>
+                          <source-user>
+                            <member>any</member>
+                          </source-user>
+                          <category>
+                            <member>any</member>
+                          </category>
+                          <application>
+                            <member>any</member>
+                          </application>
+                          <service>
+                            <member>application-default</member>
+                          </service>
+                          <hip-profiles>
+                            <member>any</member>
+                          </hip-profiles>
+                          <action>allow</action>
+                          <description>{{ description_in }}</description>
+                        </entry>
+
+  - name: entry-237321
+    xpath: /config/devices/entry[@name="localhost.localdomain"]/vsys/entry[@name="vsys1"]/rulebase/security/rules
+    element: |-
+        <entry name="{{ OUT_RULE_NAME }}" uuid="bf2e60a3-189b-46df-a1bf-7fa55013d940">
+                          <profile-setting>
+                            <group>
+                              <member>default</member>
+                            </group>
+                          </profile-setting>
+                          <to>
+                            <member>trust</member>
+                          </to>
+                          <from>
+                            <member>any</member>
+                          </from>
+                          <source>
+                            <member>any</member>
+                          </source>
+                          <destination>
+                            <member>{{ AG_NAME }}</member>
+                          </destination>
+                          <source-user>
+                            <member>any</member>
+                          </source-user>
+                          <category>
+                            <member>any</member>
+                          </category>
+                          <application>
+                            <member>any</member>
+                          </application>
+                          <service>
+                            <member>application-default</member>
+                          </service>
+                          <hip-profiles>
+                            <member>any</member>
+                          </hip-profiles>
+                          <action>allow</action>
+                          <description>{{ descr_out }}</description>
+                        </entry>
+
+
+# ---------------------------------------------------------------------
+# end of snippets section
