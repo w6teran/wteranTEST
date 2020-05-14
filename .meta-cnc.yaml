@@ -31,31 +31,31 @@ variables:
     description: Adress Group Name
     default: myFirewall
     type_hint: text
-- name: EDL_URL
+  - name: EDL_URL
     description: EDL Name
     default: URL
     type_hint: text
-- name: EDL_time
+  - name: EDL_time
     description: Adress Group Name
     default: myFirewall
     type_hint: text
   - name: OUT_RULE_NAME
     description: OUT rule Name
     default: myFirewall
-   type_hint: text
-- name: IN_RULE_NAME
+    type_hint: text
+  - name: IN_RULE_NAME
     description: IN rule Name
     default: myFirewall
     type_hint: text
- - name: TAG_NAME
-  description: tag rule Name
-                 default: myFirewall
-                 type_hint: text
-                 - name: descr_out
-                     description: descr out
-                     default: myFirewall
-                     type_hint: text
-- name: description_in
+  - name: TAG_NAME
+    description: tag rule Name
+    default: myFirewall
+    type_hint: text
+  - name: descr_out
+    description: descr out
+    default: myFirewall
+    type_hint: text
+  - name: description_in
     description: descr in
     default: myFirewall
     type_hint: text
